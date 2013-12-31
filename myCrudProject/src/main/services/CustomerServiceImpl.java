@@ -1,13 +1,17 @@
 package main.services;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import com.myproj.dao.CustomerDao;
+import com.myproj.config.SpringMongoConfig;
 import com.myproj.model.Customer;
 
 @Service
@@ -16,44 +20,56 @@ public class CustomerServiceImpl implements CustomerService,Serializable{
  
 	private static final long serialVersionUID = 1L;
 	
+	MongoOperations mongoOperation;
 	
 	 
+	 public CustomerServiceImpl() {
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringMongoConfig.class);
+		mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
+	 }
+
+
+	@Override
+	public Customer findCustomerById(String id) {
+		Query searchUserQuery = new Query(Criteria.where("customerId").is(id));
+		Customer findCust = mongoOperation.findOne(searchUserQuery, Customer.class);
+		return findCust;
+	}
+
+
+	@Override
+	public List<Customer> getCustomerList() {
+		List<Customer> cList=mongoOperation.findAll(Customer.class);
+		return cList;
+	}
+
+
+	@Override
+	public void saveCustomer(Customer customer) {
+		mongoOperation.save(customer);
+		
+	}
+
+
+	@Override
+	public void updateCustomer(Customer customer) {
+		Query searchUserQuery = new Query(Criteria.where("customerId").is(customer.getCustomerId()));
+//		Update 
+//		mongoOperation.updateFirst("", searchUserQuery, Customer.class);
+		
+	}
+
+
+	@Override
+	public void deleteCustomer(String id) {
+		Query searchUserQuery = new Query(Criteria.where("customerId").is(id));
+		mongoOperation.remove(searchUserQuery, Customer.class);
+		
+	}
 	 
+ 
 
-	private List<Customer> empList=new ArrayList<Customer>();
-	public  CustomerServiceImpl(){
-	Customer emp1 = new Customer();
-	emp1.setEmpId(1L);
-	emp1.setFirstName("Huong");
-	emp1.setLastName("Nguyen");
-	Customer emp2 = new Customer();
-	emp2.setEmpId(2L);
-	emp2.setFirstName("Khang");
-	emp2.setLastName("Le");
-	getEmpList().add(emp1);
-	getEmpList().add(emp2);
-	} 
-	
-	
-@Override
-public Customer findCustomerById(Long id) {
-	for(Customer emp: getEmpList()){
-		if(emp.getEmpId()==id){
-		return emp; 
-			}
-		}
-	return null;
-}
-
-
-public List<Customer> getEmpList() {
-	return empList;
-}
-
-
-public void setEmpList(List<Customer> empList) {
-	this.empList = empList;
-}
+ 
 
 
 }

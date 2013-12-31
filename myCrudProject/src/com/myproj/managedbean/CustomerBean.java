@@ -21,7 +21,7 @@ public class CustomerBean implements Serializable {
 	CustomerService empService;
 	
 	public Customer getEmployee() {
-	employee= empService.findCustomerById(1L);
+	employee= empService.findCustomerById("");
 	return employee;
 	}
 	public void setEmployee(Customer employee) {

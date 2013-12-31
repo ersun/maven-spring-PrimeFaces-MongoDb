@@ -8,14 +8,84 @@ xmlns:ui="http://java.sun.com/jsf/facelets"
 <h:head>
 <title>My Team</title>
 </h:head>
+<style type="text/css">
+.body
+{
+font-size:10px;!important;
+}
+
+</style>
+
 <h:body>
-<h:form>
-<h:commandButton></h:commandButton>
-<p:outputLabel  value="eeeıgıgıuee" ></p:outputLabel>
-asdas
-<p:outputLabel value="#{customerManagedBean.test()}"  ></p:outputLabel>
-<p:calendar></p:calendar>
+<h:form id="all">
+<p:growl autoUpdate="true" widgetVar="msg" id="msg" showDetail="true" ></p:growl>
+<p:panel>
+<f:facet name="header">Customer List</f:facet>
+
+<p:commandButton value="New customer" update=":modelPanel" action="#{customerManagedBean.newCustomer()}"  oncomplete="dlg.show();" > </p:commandButton>
+<br/>
+<br/>
+
+<p:dataTable id="Ctable"  value="#{customerManagedBean.customerList}" var="customer"  >
+<p:column   ><p:commandButton icon="ui-icon-circle-close" title="Delete" update="Ctable,:all:msg"  onclick="if (!window.confirm('Are you sure?')) {return false};"  action="#{customerManagedBean.delete(customer.customerId)}" ></p:commandButton>  </p:column>
+<p:column  > <p:commandButton icon="ui-icon-pencil" title="Edit" action="#{customerManagedBean.edit(customer)}" update=":modelPanel" oncomplete="dlg.show();" ></p:commandButton> </p:column>
+<p:column headerText="Name" >#{customer.firstName} </p:column>
+<p:column headerText="Surname" >#{customer.lastName} </p:column>
+<p:column headerText="Gender" >#{customer.gender} </p:column>
+<p:column headerText="Email" >#{customer.email} </p:column>
+<p:column headerText="Phone" >#{customer.phone} </p:column>
+<p:column headerText="Job" >#{customer.job} </p:column>
+<p:column headerText="Address" >#{customer.address} </p:column>
+</p:dataTable>
+
+
+</p:panel>
+ 
+</h:form>
+
+<p:dialog id="modelPanel" widgetVar="dlg" header="Customer" closable="true" resizable="true" showEffect="clip" >
+
+<h:form id="dlgForm" >
+<p:panel>
+<p:messages/>
+<h:panelGrid columns="2"  >
+Name <p:inputText  value="#{customerManagedBean.customer.firstName}" ></p:inputText>
+Surname<p:inputText  value="#{customerManagedBean.customer.lastName}" ></p:inputText>
+Email <p:inputText  value="#{customerManagedBean.customer.email}" id="email">
+<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" for="email" />
+
+</p:inputText>
+Gender <p:selectOneMenu value="#{customerManagedBean.customer.gender}"   >
+<f:selectItem  itemLabel="Erkek" itemValue="Erkek" ></f:selectItem>
+<f:selectItem  itemLabel="Kadın" itemValue="Kadın" ></f:selectItem>
+</p:selectOneMenu>
+Phone<p:inputMask mask="0999 999 99 99" value="#{customerManagedBean.customer.phone}" ></p:inputMask>
+Job<p:selectOneMenu value="#{customerManagedBean.customer.job}" >
+<f:selectItem itemValue="boş" itemLabel="boş" ></f:selectItem>
+<p:message  ></p:message>
+</p:selectOneMenu>
+Address<p:inputTextarea value="#{customerManagedBean.customer.address}" cols="30" rows="3"  ></p:inputTextarea>
+</h:panelGrid>
+
+ <p:commandButton value="Save" rendered="#{customerManagedBean.customer.customerId==null}" action="#{customerManagedBean.save()}"  update=":all:Ctable" oncomplete="dlg.hide();"  ></p:commandButton>
+ <p:commandButton value="Update" rendered="#{customerManagedBean.customer.customerId!=null}" action="#{customerManagedBean.delete(customerManagedBean.customer.customerId)}"  update=":all:Ctable" oncomplete="dlg.hide();"  ></p:commandButton>
+ <p:commandButton value="Delete" rendered="#{customerManagedBean.customer.customerId!=null}" action="#{customerManagedBean.delete(customerManagedBean.customer.customerId)}"  update=":all:Ctable" oncomplete="dlg.hide();"  ></p:commandButton>
+ <p:commandButton value="Cancel" oncomplete="dlg.hide();"  ></p:commandButton>
+ 
+
+</p:panel> 
+
 
 </h:form>
+
+
+
+
+
+</p:dialog>
+
+
 </h:body>
+
+ 
 </html>
