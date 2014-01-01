@@ -1,91 +1,145 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-xmlns:f="http://java.sun.com/jsf/core"
-xmlns:h="http://java.sun.com/jsf/html"
-xmlns:p="http://primefaces.org/ui"
-xmlns:ui="http://java.sun.com/jsf/facelets"
-> 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-<title>My Team</title>
+	<title>Customer List</title>
 </h:head>
 <style type="text/css">
-.body
-{
-font-size:10px;!important;
+.body {
+	font-size: 10px;
+	!
+	important;
 }
-
 </style>
 
 <h:body>
-<h:form id="all">
-<p:growl autoUpdate="true" widgetVar="msg" id="msg" showDetail="true" ></p:growl>
-<p:panel>
-<f:facet name="header">Customer List</f:facet>
+	<h:form id="all">
+		<p:growl autoUpdate="true" widgetVar="msg" id="msg" showDetail="true"></p:growl>
+		<p:panel>
+			<f:facet name="header">Customer List</f:facet>
 
-<p:commandButton value="New customer" update=":modelPanel" action="#{customerManagedBean.newCustomer()}"  oncomplete="dlg.show();" > </p:commandButton>
-<br/>
-<br/>
+			<p:commandButton value="New customer" update=":dlgForm"
+				action="#{customerManagedBean.newCustomer()}"
+				oncomplete="dlg.show();">
+			</p:commandButton>
+			<br />
+			<br />
 
-<p:dataTable id="Ctable"  value="#{customerManagedBean.customerList}" var="customer"  >
-<p:column   ><p:commandButton icon="ui-icon-circle-close" title="Delete" update="Ctable,:all:msg"  onclick="if (!window.confirm('Are you sure?')) {return false};"  action="#{customerManagedBean.delete(customer.customerId)}" ></p:commandButton>  </p:column>
-<p:column  > <p:commandButton icon="ui-icon-pencil" title="Edit" action="#{customerManagedBean.edit(customer)}" update=":modelPanel" oncomplete="dlg.show();" ></p:commandButton> </p:column>
-<p:column headerText="Name" >#{customer.firstName} </p:column>
-<p:column headerText="Surname" >#{customer.lastName} </p:column>
-<p:column headerText="Gender" >#{customer.gender} </p:column>
-<p:column headerText="Email" >#{customer.email} </p:column>
-<p:column headerText="Phone" >#{customer.phone} </p:column>
-<p:column headerText="Job" >#{customer.job} </p:column>
-<p:column headerText="Address" >#{customer.address} </p:column>
-</p:dataTable>
+			<p:dataTable id="Ctable" value="#{customerManagedBean.customerList}"
+				var="customer">
+				<p:column>
+					<p:commandButton icon="ui-icon-circle-close" title="Delete"
+						update="Ctable,:all:msg"
+						onclick="if (!window.confirm('Are you sure?')) {return false};"
+						action="#{customerManagedBean.delete(customer.customerId)}"></p:commandButton>
+				</p:column>
 
-
-</p:panel>
- 
-</h:form>
-
-<p:dialog id="modelPanel" widgetVar="dlg" header="Customer" closable="true" resizable="true" showEffect="clip" >
-
-<h:form id="dlgForm" >
-<p:panel>
-<p:messages/>
-<h:panelGrid columns="2"  >
-Name <p:inputText  value="#{customerManagedBean.customer.firstName}" ></p:inputText>
-Surname<p:inputText  value="#{customerManagedBean.customer.lastName}" ></p:inputText>
-Email <p:inputText  value="#{customerManagedBean.customer.email}" id="email">
-<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" for="email" />
-
-</p:inputText>
-Gender <p:selectOneMenu value="#{customerManagedBean.customer.gender}"   >
-<f:selectItem  itemLabel="Erkek" itemValue="Erkek" ></f:selectItem>
-<f:selectItem  itemLabel="Kadın" itemValue="Kadın" ></f:selectItem>
-</p:selectOneMenu>
-Phone<p:inputMask mask="0999 999 99 99" value="#{customerManagedBean.customer.phone}" ></p:inputMask>
-Job<p:selectOneMenu value="#{customerManagedBean.customer.job}" >
-<f:selectItem itemValue="boş" itemLabel="boş" ></f:selectItem>
-<p:message  ></p:message>
-</p:selectOneMenu>
-Address<p:inputTextarea value="#{customerManagedBean.customer.address}" cols="30" rows="3"  ></p:inputTextarea>
-</h:panelGrid>
-
- <p:commandButton value="Save" rendered="#{customerManagedBean.customer.customerId==null}" action="#{customerManagedBean.save()}"  update=":all:Ctable" oncomplete="dlg.hide();"  ></p:commandButton>
- <p:commandButton value="Update" rendered="#{customerManagedBean.customer.customerId!=null}" action="#{customerManagedBean.delete(customerManagedBean.customer.customerId)}"  update=":all:Ctable" oncomplete="dlg.hide();"  ></p:commandButton>
- <p:commandButton value="Delete" rendered="#{customerManagedBean.customer.customerId!=null}" action="#{customerManagedBean.delete(customerManagedBean.customer.customerId)}"  update=":all:Ctable" oncomplete="dlg.hide();"  ></p:commandButton>
- <p:commandButton value="Cancel" oncomplete="dlg.hide();"  ></p:commandButton>
- 
-
-</p:panel> 
+				<p:column>
+					<p:commandButton icon="ui-icon-pencil" title="Edit"
+						action="#{customerManagedBean.edit(customer)}" update=":dlgForm"
+						oncomplete="dlg.show();"></p:commandButton>
+				</p:column>
+				<p:column headerText="Name">#{customer.firstName} </p:column>
+				<p:column headerText="Surname">#{customer.lastName} </p:column>
+				<p:column headerText="Gender">#{customer.gender} </p:column>
+				<p:column headerText="Email">#{customer.email} </p:column>
+				<p:column headerText="Phone">#{customer.phone} </p:column>
+				<p:column headerText="Job">#{customer.job} </p:column>
+				<p:column headerText="Address">#{customer.address} </p:column>
+			</p:dataTable>
 
 
-</h:form>
+		</p:panel>
+
+	</h:form>
+
+	<p:dialog id="modelPanel" widgetVar="dlg" header="Customer"
+		closable="true" resizable="true" showEffect="clip">
+		<h:form id="dlgForm">
+
+			<p:panel>
+				<p:messages />
+				<h:panelGrid columns="2">
+Name <p:inputText value="#{customerManagedBean.customer.firstName}" title="Name"
+						requiredMessage="Name is required field" required="true" id="name">
+
+					</p:inputText>
+Surname<p:inputText value="#{customerManagedBean.customer.lastName}"
+						validatorMessage="Email should be right" id="Surname"></p:inputText>
+Email* <p:inputText value="#{customerManagedBean.customer.email}" title="Email"
+						id="email">
+						<f:validateRegex
+							pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]"
+							for="email" />
+
+					</p:inputText>
+Gender* <p:selectOneMenu value="#{customerManagedBean.customer.gender}" validatorMessage="Gender is required"  >
+						<f:selectItems value="#{customerManagedBean.genderList}"></f:selectItems>
+
+					</p:selectOneMenu>
+Phone*<p:inputMask mask="0999 999 99 99"
+						value="#{customerManagedBean.customer.phone}"
+						requiredMessage="Phone number is required field" required="true"
+						id="phone" title="Phone number"  ></p:inputMask>
+Job<p:selectOneMenu value="#{customerManagedBean.customer.job}">
+						<f:selectItems value="#{customerManagedBean.jobList}"></f:selectItems>
+						<p:message></p:message>
+					</p:selectOneMenu>
+Address<p:inputTextarea value="#{customerManagedBean.customer.address}"
+						cols="30" rows="3"></p:inputTextarea>
+				</h:panelGrid>
+
+				<p:commandButton value="Save"
+					rendered="#{customerManagedBean.customer.customerId==null}"
+					action="#{customerManagedBean.save()}"
+					update=":all:Ctable,:all:msg"
+					oncomplete=" handleSubmitRequest(xhr, status, args, 'modelPanel','Ctable');"></p:commandButton>
+
+				<p:commandButton value="Update"
+					rendered="#{customerManagedBean.customer.customerId!=null}"
+					action="#{customerManagedBean.update()}"
+					update=":all:Ctable,:all:msg"
+					oncomplete=" handleSubmitRequest(xhr, status, args, 'modelPanel','Ctable');"></p:commandButton>
+
+				<p:commandButton value="Delete"
+					rendered="#{customerManagedBean.customer.customerId!=null}"
+					action="#{customerManagedBean.delete(customerManagedBean.customer.customerId)}"
+					update=":all:Ctable,:all:msg"
+					oncomplete=" handleSubmitRequest(xhr, status, args, 'modelPanel','Ctable');"></p:commandButton>
+
+				<p:commandButton value="Cancel"   oncomplete="dlg.hide();"></p:commandButton>
 
 
+			</p:panel>
 
+		</h:form>
+	</p:dialog>
 
+	<script type="text/javascript">
+		function handleSubmitRequest(xhr, status, args, dialogName, formName) {
 
-</p:dialog>
+			dialog = jQuery('#' + dialogName);
+			if (args.validationFailed) {
+				dialog.effect("shake", {
+					times : 3
+				}, 100);
+			} else {
+				clearForm(formName);
+				dlg.hide();
 
+			}
+		}
+		function clearForm(formName) {
+			jQuery('#' + formName).each(function() {
+				this.reset();
+			});
+		}
+	</script>
 
 </h:body>
 
- 
+
 </html>

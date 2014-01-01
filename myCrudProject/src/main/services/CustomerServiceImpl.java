@@ -8,7 +8,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.myproj.config.SpringMongoConfig;
@@ -53,10 +52,7 @@ public class CustomerServiceImpl implements CustomerService,Serializable{
 
 	@Override
 	public void updateCustomer(Customer customer) {
-		Query searchUserQuery = new Query(Criteria.where("customerId").is(customer.getCustomerId()));
-//		Update 
-//		mongoOperation.updateFirst("", searchUserQuery, Customer.class);
-		
+		mongoOperation.save(customer);
 	}
 
 
@@ -67,9 +63,5 @@ public class CustomerServiceImpl implements CustomerService,Serializable{
 		
 	}
 	 
- 
-
- 
-
 
 }
