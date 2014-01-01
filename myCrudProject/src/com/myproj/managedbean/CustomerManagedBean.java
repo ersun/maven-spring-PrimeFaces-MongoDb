@@ -29,7 +29,7 @@ public class CustomerManagedBean {
 	CustomerService customerService=new CustomerServiceImpl();
 	 
 	  Customer customer=new Customer();
-	 
+	 private Boolean captcha=false;
 	
 	public void save(){
 		customerService.saveCustomer(getCustomer());
@@ -55,9 +55,11 @@ public class CustomerManagedBean {
 	
 	
 	public void edit(Customer c){
+		setCaptcha(false);
 		setCustomer(c);
 	}
 	public void newCustomer(){
+		setCaptcha(true);
 		setCustomer(new Customer());
 	}
 	public Customer getCustomer() {
@@ -80,6 +82,12 @@ public class CustomerManagedBean {
 		sList.add(new SelectItem("student", "Student"));
 		sList.add(new SelectItem("worker", "worker"));
 		return sList;
+	}
+	public Boolean getCaptcha() {
+		return captcha;
+	}
+	public void setCaptcha(Boolean captcha) {
+		this.captcha = captcha;
 	}
 
 }

@@ -17,11 +17,12 @@
 
 <h:body>
 	<h:form id="all">
+
 		<p:growl autoUpdate="true" widgetVar="msg" id="msg" showDetail="true"></p:growl>
 		<p:panel>
 			<f:facet name="header">Customer List</f:facet>
 
-			<p:commandButton value="New customer" update=":dlgForm"
+			<p:commandButton value="New customer" update=":dlgForm:modelPanel" immediate="true" 
 				action="#{customerManagedBean.newCustomer()}"
 				oncomplete="dlg.show();">
 			</p:commandButton>
@@ -39,7 +40,7 @@
 
 				<p:column>
 					<p:commandButton icon="ui-icon-pencil" title="Edit"
-						action="#{customerManagedBean.edit(customer)}" update=":dlgForm"
+						action="#{customerManagedBean.edit(customer)}" update=":dlgForm:modelPanel"
 						oncomplete="dlg.show();"></p:commandButton>
 				</p:column>
 				<p:column headerText="Name">#{customer.firstName} </p:column>
@@ -56,11 +57,10 @@
 
 	</h:form>
 
+		<h:form id="dlgForm">
 	<p:dialog id="modelPanel" widgetVar="dlg" header="Customer"
 		closable="true" resizable="true" showEffect="clip">
-		<h:form id="dlgForm">
-
-			<p:panel>
+ 
 				<p:messages />
 				<h:panelGrid columns="2">
 Name <p:inputText value="#{customerManagedBean.customer.firstName}" title="Name"
@@ -91,7 +91,7 @@ Job<p:selectOneMenu value="#{customerManagedBean.customer.job}">
 Address<p:inputTextarea value="#{customerManagedBean.customer.address}"
 						cols="30" rows="3"></p:inputTextarea>
 				</h:panelGrid>
-
+				 
 				<p:commandButton value="Save"
 					rendered="#{customerManagedBean.customer.customerId==null}"
 					action="#{customerManagedBean.save()}"
@@ -104,19 +104,15 @@ Address<p:inputTextarea value="#{customerManagedBean.customer.address}"
 					update=":all:Ctable,:all:msg"
 					oncomplete=" handleSubmitRequest(xhr, status, args, 'modelPanel','Ctable');"></p:commandButton>
 
-				<p:commandButton value="Delete"
+				<p:commandButton value="Delete" immediate="true"
 					rendered="#{customerManagedBean.customer.customerId!=null}"
 					action="#{customerManagedBean.delete(customerManagedBean.customer.customerId)}"
 					update=":all:Ctable,:all:msg"
 					oncomplete=" handleSubmitRequest(xhr, status, args, 'modelPanel','Ctable');"></p:commandButton>
-
-				<p:commandButton value="Cancel"   oncomplete="dlg.hide();"></p:commandButton>
-
-
-			</p:panel>
-
-		</h:form>
+ 
+ 
 	</p:dialog>
+		</h:form>
 
 	<script type="text/javascript">
 		function handleSubmitRequest(xhr, status, args, dialogName, formName) {
